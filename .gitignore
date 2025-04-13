@@ -4,12 +4,12 @@
 /main
 
 # DB & data files
-/db/
+/db/*.db
 /*.csv
 
 # PDFs
 /pdfs/*.pdf
-/test
+/test/*.pdf
 
 # Python scripts (if temporary)
 /search.py
