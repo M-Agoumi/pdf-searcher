@@ -11,9 +11,6 @@
 /pdfs/*.pdf
 /test/*.pdf
 
-# Python scripts (if temporary)
-/search.py
-
 # System/editor junk
 *.swp
 *.DS_Store
