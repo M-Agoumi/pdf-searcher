@@ -1,0 +1,19 @@
+# Go binaries
+/indexer
+/searcher
+/main
+
+# DB & data files
+/db/
+/*.csv
+
+# PDFs
+/pdfs/*.pdf
+/test
+
+# Python scripts (if temporary)
+/search.py
+
+# System/editor junk
+*.swp
+*.DS_Store
