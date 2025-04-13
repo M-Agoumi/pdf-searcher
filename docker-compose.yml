@@ -1,0 +1,9 @@
+services:
+  pdfsearch:
+    build: .
+    container_name: pdfsearch
+    volumes:
+      - ./pdfs:/app/pdfs
+      - ./db:/app/db
+    stdin_open: true
+    tty: true
