@@ -16,6 +16,7 @@ import (
 func main() {
 	dbPath := flag.String("db", "index.db", "Path to SQLite database")
 	all := flag.Bool("all", false, "Require all keywords to match (AND logic)")
+	exact := flag.Bool("exact", false, "Require exact phrase match")
 	flag.Parse()
 
 	keywords := flag.Args()
@@ -31,11 +32,14 @@ func main() {
 	defer db.Close()
 
 	var query string
-	if *all {
+	if *exact {
+		query = fmt.Sprintf("\"%s\"", strings.Join(keywords, " "))
+	} else if *all {
 		query = strings.Join(keywords, " AND ")
 	} else {
 		query = strings.Join(keywords, " OR ")
 	}
+	
 
 	rows, err := db.Query("SELECT filename FROM pdfs WHERE content MATCH ?", query)
 	if err != nil {
