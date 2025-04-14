@@ -59,11 +59,36 @@ docker compose up --build
 ```bash
 ./searcher --db /app/db/index.db keyword1 keyword2
 ```
+✅ This returns PDFs that contain **at least one** of the given keywords.  
+It’s the fastest and broadest search mode — good for finding **any relevant match**.
+
+Example:  
+Finds PDFs that have either `"invoice"` **or** `"receipt"` somewhere in the content.
+
+---
 
 ### 🔒 Search PDFs (AND match)
 ```bash
 ./searcher --db /app/db/index.db --all keyword1 keyword2
 ```
+🔐 This returns PDFs that contain **all** the given keywords, but **not necessarily together**.  
+Each word can appear anywhere in the document — even on separate pages.
+
+Example:  
+Finds PDFs that mention both `"project"` and `"budget"`, even if they’re in different sections.
+
+---
+
+### 🧵 Search PDFs (Exact phrase match)
+```bash
+./searcher --db /app/db/index.db --exact keyword1 keyword2
+```
+🧵 This returns PDFs that contain the **exact phrase** as written — same words, same order, side-by-side.
+
+Example:  
+Only finds PDFs that have the exact phrase `"project budget"` (not one with `"budget"` in a different paragraph).
+
+---
 
 ### 🚫 No Index? Just Search Once
 If you don't want to build an index and just want to search your PDF collection once directly:
