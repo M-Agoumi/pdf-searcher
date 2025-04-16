@@ -32,13 +32,22 @@ func main() {
 	defer db.Close()
 
 	var query string
-	if *exact {
+	if *exact && *all {
+		// Quote multi-word args, keep AND between all
+		for i, kw := range keywords {
+			if strings.Contains(kw, " ") {
+				keywords[i] = fmt.Sprintf("\"%s\"", kw)
+			}
+		}
+		query = strings.Join(keywords, " AND ")
+	} else if *exact {
 		query = fmt.Sprintf("\"%s\"", strings.Join(keywords, " "))
 	} else if *all {
 		query = strings.Join(keywords, " AND ")
 	} else {
 		query = strings.Join(keywords, " OR ")
 	}
+	
 	
 
 	rows, err := db.Query("SELECT filename FROM pdfs WHERE content MATCH ?", query)
