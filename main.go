@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -53,14 +54,31 @@ func searchPDF(path string, keywords []string, requireAll bool) (bool, error) {
 	}
 }
 
+func copyFile(src, dst string) error {
+	input, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer input.Close()
+
+	output, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer output.Close()
+
+	_, err = io.Copy(output, input)
+	return err
+}
 
 func main() {
 	// Command-line flags
 	folder := flag.String("folder", "./pdfs", "Folder to search for PDFs")
 	threads := flag.Int("threads", 8, "Number of concurrent threads (goroutines)")
 	allMatch := flag.Bool("all", false, "Require all keywords to appear in a file (AND match)")
-
+	saveFolder := flag.String("save", "", "Folder to save found PDFs")
 	flag.Parse()
+
 	keywords := flag.Args()
 	if len(keywords) == 0 {
 		fmt.Println("❌ Usage: go run main.go --folder <path> --threads <num> <searchTerm1> [searchTerm2] ...")
@@ -93,6 +111,12 @@ func main() {
 	var mu sync.Mutex
 	found := 0
 
+	if *saveFolder != "" {
+		if err := os.MkdirAll(*saveFolder, os.ModePerm); err != nil {
+			log.Fatalf("Failed to create folder %s: %v", *saveFolder, err)
+		}
+	}
+
 	for _, file := range files {
 		wg.Add(1)
 		sem <- struct{}{}
@@ -110,6 +134,13 @@ func main() {
 				mu.Lock()
 				found++
 				fmt.Printf("✅ Found in: %s\n", filepath.Base(f))
+				if *saveFolder != "" {
+					srcPath := f
+					dstPath := filepath.Join(*saveFolder, filepath.Base(f))
+					if err := copyFile(srcPath, dstPath); err != nil {
+						log.Printf("❌ Failed to copy %s: %v", filepath.Base(f), err)
+					}
+				}
 				mu.Unlock()
 			}
 		}(file)

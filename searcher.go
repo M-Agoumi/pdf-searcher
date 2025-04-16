@@ -6,17 +6,37 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
+func copyFile(src, dst string) error {
+	input, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer input.Close()
+
+	output, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer output.Close()
+
+	_, err = io.Copy(output, input)
+	return err
+}
+
 func main() {
 	dbPath := flag.String("db", "index.db", "Path to SQLite database")
 	all := flag.Bool("all", false, "Require all keywords to match (AND logic)")
 	exact := flag.Bool("exact", false, "Require exact phrase match")
+	saveFolder := flag.String("save", "", "Folder to save found PDFs")
 	flag.Parse()
 
 	keywords := flag.Args()
@@ -39,7 +59,6 @@ func main() {
 	} else {
 		query = strings.Join(keywords, " OR ")
 	}
-	
 
 	rows, err := db.Query("SELECT filename FROM pdfs WHERE content MATCH ?", query)
 	if err != nil {
@@ -54,6 +73,14 @@ func main() {
 		if err := rows.Scan(&filename); err == nil {
 			fmt.Println("✅", filename)
 			found = true
+
+			if *saveFolder != "" {
+				srcPath := filepath.Join("./pdfs", filename)
+				dstPath := filepath.Join(*saveFolder, filename)
+				if err := copyFile(srcPath, dstPath); err != nil {
+					log.Printf("❌ Failed to copy %s: %v", filename, err)
+				}
+			}
 		}
 	}
 	if !found {

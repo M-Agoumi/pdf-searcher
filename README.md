@@ -141,3 +141,15 @@ CGO_ENABLED=1 go build -o main main.go
 > You can do whatever the fuck you want with this software.
 > 
 > THE AUTHOR IS NOT RESPONSIBLE FOR ANY DAMAGE OR CONSEQUENCES OF USING THIS SOFTWARE.
+
+### Save Matching PDFs
+```bash
+./searcher --db /app/db/index.db --save /app/found_pdfs keyword1 keyword2
+```
+This command saves the matching PDFs to the `/app/found_pdfs` directory inside the container.
+
+### Combine Save and Search
+```bash
+./main --folder /app/pdfs --save /app/found_pdfs keyword1 keyword2
+```
+This command searches for matching PDFs and saves them to the `/app/found_pdfs` directory.

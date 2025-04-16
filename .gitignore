@@ -10,6 +10,7 @@
 # PDFs
 /pdfs/*.pdf
 /test/*.pdf
+/found_pdfs/*.pdf
 
 # System/editor junk
 *.swp
