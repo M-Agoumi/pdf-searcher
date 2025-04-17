@@ -15,3 +15,4 @@
 # System/editor junk
 *.swp
 *.DS_Store
+.idea
