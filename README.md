@@ -90,6 +90,15 @@ Only finds PDFs that have the exact phrase `"project budget"` (not one with `"bu
 
 ---
 
+### 🎯 Search PDFs (AND match + exact phrases)
+
+You can combine `--all` with quoted phrases to find all exact values in a single file:
+
+```bash
+./searcher --db /app/db/index.db --all "john doe" "invoice 2024" payment
+
+---
+
 ### 🚫 No Index? Just Search Once
 If you don't want to build an index and just want to search your PDF collection once directly:
 ```bash
