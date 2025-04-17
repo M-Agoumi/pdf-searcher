@@ -8,7 +8,6 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -56,23 +55,6 @@ func confirm(prompt string) bool {
 	input, _ := reader.ReadString('\n')
 	input = strings.TrimSpace(strings.ToLower(input))
 	return input == "y" || input == "yes"
-}
-
-func copyFile(src, dst string) error {
-	input, err := os.Open(src)
-	if err != nil {
-		return err
-	}
-	defer input.Close()
-
-	output, err := os.Create(dst)
-	if err != nil {
-		return err
-	}
-	defer output.Close()
-
-	_, err = io.Copy(output, input)
-	return err
 }
 
 func main() {

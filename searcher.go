@@ -87,6 +87,8 @@ func main() {
 				dstPath := filepath.Join(*saveFolder, filename)
 				if err := copyFile(srcPath, dstPath); err != nil {
 					log.Printf("❌ Failed to copy %s: %v", filename, err)
+				} else {
+					fmt.Printf("💾 Saved to: %s\n", dstPath)
 				}
 			}
 		}

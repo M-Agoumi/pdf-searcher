@@ -139,6 +139,8 @@ func main() {
 					dstPath := filepath.Join(*saveFolder, filepath.Base(f))
 					if err := copyFile(srcPath, dstPath); err != nil {
 						log.Printf("❌ Failed to copy %s: %v", filepath.Base(f), err)
+					} else {
+						fmt.Printf("💾 Saved to: %s\n", dstPath)
 					}
 				}
 				mu.Unlock()
