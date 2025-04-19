@@ -12,6 +12,33 @@ A fast, concurrent PDF indexing and search tool written in Go. Perfect for scann
 
 ---
 
+## 📦 Download Binaries (No Docker Needed)
+
+If you don’t want to build from source or use Docker, you can simply [download the binaries from the Releases page](https://github.com/M-Agoumi/pdf-searcher/releases).
+
+### ✅ Available Platforms:
+- 🐧 Linux (x86_64)
+- 🪟 Windows (x86_64)
+
+Each binary is provided for:
+- `main` (direct search)
+- `indexer` (index builder)
+- `searcher` (query index)
+
+### 🔐 Optional: Verify MD5 Checksum
+After downloading a file, you can verify its integrity:
+
+#### Linux / macOS:
+```bash
+md5sum main-linux-amd64
+```
+
+#### Windows (PowerShell):
+```powershell
+Get-FileHash .\main-windows-amd64.exe -Algorithm MD5
+```
+Compare the output with the checksums provided in the release notes.
+
 ## 📁 Project Structure
 ```
 .
