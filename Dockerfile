@@ -8,12 +8,13 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY indexer.go searcher.go ./
+COPY indexer.go searcher.go main.go ./
 
 # Ensure CGO and FTS5 support for SQLite
 ENV CGO_ENABLED=1
 RUN go build -tags sqlite_fts5 -o indexer indexer.go
 RUN go build -tags sqlite_fts5 -o searcher searcher.go
+RUN go build -o main main.go
 
 # --- Minimal runtime image ---
 FROM debian:bullseye-slim
@@ -23,7 +24,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-COPY --from=builder /app/indexer /app/searcher /app/
+COPY --from=builder /app/indexer /app/searcher /app/main /app/
 
 # Default volumes for persistent data access
 VOLUME ["/app/db", "/app/pdfs"]
